@@ -1,8 +1,8 @@
 {
   "name": "todo-list-nestjs",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Course",
+  "author": "Forceres",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -23,8 +23,13 @@
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
+    "dotenv": "^16.0.3",
+    "http-status-codes": "^2.2.0",
+    "pg": "^8.10.0",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "swagger-ui-express": "^4.6.2",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
@@ -36,6 +41,7 @@
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
