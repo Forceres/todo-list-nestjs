@@ -9,6 +9,8 @@ import {
   POSTGRES_PORT,
   POSTGRES_USER,
 } from './environments/env';
+import { Role } from './modules/roles/role.model';
+import { RoleModule } from './modules/roles/role.module';
 import { User } from './modules/users/user.model';
 import { UserModule } from './modules/users/user.module';
 @Module({
@@ -20,11 +22,12 @@ import { UserModule } from './modules/users/user.module';
       username: POSTGRES_USER,
       password: POSTGRES_PASSWORD,
       database: POSTGRES_DB,
-      models: [User],
+      models: [User, Role],
       autoLoadModels: true,
       synchronize: true,
     }),
     UserModule,
+    RoleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
