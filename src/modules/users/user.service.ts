@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateUserDto } from './dto/create.user.dto';
 import { User } from './user.model';
-import { hash } from 'bcrypt';
+import { hash, compare } from 'bcrypt';
 import { CRYPT_SALT } from 'src/environments/env';
 import { UpdateUserDto } from './dto/update.user.dto';
 
@@ -32,6 +32,8 @@ export class UserService {
     const checkUser = await this.userRepository.findOne({ where: { id: id } });
     if (checkUser === null) throw new NotFoundException('This user not found');
     const { password } = dto;
+    const equalPassword = await compare(password, checkUser.password); 
+    if (equalPassword) throw new Error('You entered the same password');
     const hashed = await hash(password, CRYPT_SALT);
     await this.userRepository.update({ password: hashed }, { where: { id: id } });
     return await this.userRepository.findOne({ where: { id: id } });
