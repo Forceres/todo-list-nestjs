@@ -8,6 +8,19 @@ config({
 // Application port
 const PORT: number = +process.env.PORT || 4000;
 
+// Secret key for JWT token
+const SECRET_KEY: string = process.env.SECRET_KEY || 'secret';
+
+// Expiration Time
+const TOKEN_EXPIRATION: number = +process.env.TOKEN_EXPIRATION || 3600;
+
+// Secret key for Refresh token
+const SECRET_REFRESH_KEY: string = process.env.SECRET_REFRESH_KEY || 'refresh';
+
+// Refresh token expiration time
+const REFRESH_TOKEN_EXPIRATION: number =
+  +process.env.REFRESH_TOKEN_EXPIRATION || 72000;
+
 // Salt for password to hash
 const CRYPT_SALT: number = +process.env.CRYPT_SALT || 10;
 
@@ -26,4 +39,8 @@ export {
   POSTGRES_DB,
   PORT,
   CRYPT_SALT,
+  SECRET_KEY,
+  TOKEN_EXPIRATION,
+  SECRET_REFRESH_KEY,
+  REFRESH_TOKEN_EXPIRATION,
 };
