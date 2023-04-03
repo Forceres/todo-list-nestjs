@@ -1,5 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { AfterUpdate, Column, CreatedAt, DataType, Model, Table, UpdatedAt } from 'sequelize-typescript';
+import {
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  ForeignKey,
+  Model,
+  Table,
+  UpdatedAt,
+} from 'sequelize-typescript';
+import { Role } from '../roles/role.model';
 
 interface UserCreationAttributes {
   username: string;
@@ -8,10 +18,19 @@ interface UserCreationAttributes {
 
 @Table({ tableName: 'user' })
 export class User extends Model<User, UserCreationAttributes> {
-
-  @ApiProperty({example: '1c6e6134-7d4a-4b39-8ca4-4d53fddf16f2', description: 'UUIDV4 as UserId (PK)'})
-  @Column({ type: DataType.UUID, unique: true, primaryKey: true, defaultValue: DataType.UUIDV4 })
+  @ApiProperty({
+    example: '1c6e6134-7d4a-4b39-8ca4-4d53fddf16f2',
+    description: 'UUIDV4 as UserId (PK)',
+  })
+  @Column({
+    type: DataType.UUID,
+    unique: true,
+    primaryKey: true,
+    defaultValue: DataType.UUIDV4,
+  })
   id: string;
+
+  @ApiProperty({ example: 'MaximKalin', description: 'Nickname of the user' })
   @Column({
     type: DataType.STRING,
     unique: true,
@@ -24,7 +43,7 @@ export class User extends Model<User, UserCreationAttributes> {
   //   }
   // })
 
-  @ApiProperty({example: 'qwerty123', description: 'Password of User'})
+  @ApiProperty({ example: 'qwerty123', description: 'Password of User' })
   @Column({
     type: DataType.STRING,
     unique: false,
@@ -39,7 +58,7 @@ export class User extends Model<User, UserCreationAttributes> {
   })
   password: string;
 
-  @ApiProperty({example: '15', description: 'The quantity of user tasks'})
+  @ApiProperty({ example: '15', description: 'The quantity of user tasks' })
   @Column({ type: DataType.INTEGER, unique: false, defaultValue: 0 })
   tasks_quantity: number;
 
@@ -48,7 +67,10 @@ export class User extends Model<User, UserCreationAttributes> {
   //   instance.updatedAt = new Date();
   // }
 
-  @ApiProperty({example: '01/02/2000, 15:23:11', description: 'Date and time of creation'})
+  @ApiProperty({
+    example: '01/02/2000, 15:23:11',
+    description: 'Date and time of creation',
+  })
   @CreatedAt
   @Column({
     type: DataType.DATE,
@@ -68,7 +90,10 @@ export class User extends Model<User, UserCreationAttributes> {
   })
   createdAt: Date;
 
-  @ApiProperty({example: '01/02/2000, 15:23:11', description: 'Date and time of update'})
+  @ApiProperty({
+    example: '01/02/2000, 15:23:11',
+    description: 'Date and time of update',
+  })
   @UpdatedAt
   @Column({
     type: DataType.DATE,
@@ -87,4 +112,15 @@ export class User extends Model<User, UserCreationAttributes> {
     defaultValue: DataType.NOW,
   })
   updatedAt: Date;
+
+  @ApiProperty({
+    example: '1c6e6134-7d4a-4b39-8ca4-4d53fddf16f2',
+    description: 'Foreign Key for the role bond (UUID)',
+  })
+  @ForeignKey(() => Role)
+  @Column({ type: DataType.UUID })
+  role_id: string;
+
+  @BelongsTo(() => Role, { foreignKey: 'role_id' })
+  role: Role;
 }
