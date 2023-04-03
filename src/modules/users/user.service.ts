@@ -5,9 +5,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { hash, compare } from 'bcrypt';
 import { CreateUserDto } from './dto/create.user.dto';
 import { User } from './user.model';
-import { hash, compare } from 'bcrypt';
 import { CRYPT_SALT } from 'src/environments/env';
 import { UpdateUserDto } from './dto/update.user.dto';
 import { RoleService } from '../roles/role.service';
