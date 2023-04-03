@@ -1,20 +1,39 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateUserDto } from './dto/create.user.dto';
 import { User } from './user.model';
 import { hash, compare } from 'bcrypt';
 import { CRYPT_SALT } from 'src/environments/env';
 import { UpdateUserDto } from './dto/update.user.dto';
+import { RoleService } from '../roles/role.service';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User) private userRepository: typeof User) {}
+  constructor(
+    @InjectModel(User) private userRepository: typeof User,
+    private roleService: RoleService,
+  ) {}
 
   async createUser(dto: CreateUserDto): Promise<User> {
-    const { username, password } = dto;
+    const isUserExists = await this.userRepository.findOne({
+      where: { username: dto.username },
+    });
+    if (isUserExists)
+      throw new HttpException(
+        'The user with such a username already exists!',
+        HttpStatus.BAD_REQUEST,
+      );
+    const { password } = dto;
+    const role = await this.roleService.getRoleByTitle('USER');
     const hashed = await hash(password, CRYPT_SALT);
-    const newDto = { username: username, password: hashed };
-    const user = await this.userRepository.create(newDto);
+    const user = await this.userRepository.create({ ...dto, password: hashed });
+    await user.$set('role', role);
+    user.role = role;
     return user;
   }
 
@@ -24,7 +43,20 @@ export class UserService {
   }
 
   async getUserById(id: string): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { id: id } });
+    const user = await this.userRepository.findOne({
+      where: { id: id },
+      include: { all: true },
+    });
+    if (!user) throw new NotFoundException('This user not found!');
+    return user;
+  }
+
+  async getUserByUsername(username: string): Promise<User> {
+    const user = await this.userRepository.findOne({
+      where: { username: username },
+      include: { all: true },
+    });
+    if (!user) throw new NotFoundException('This user not found!');
     return user;
   }
 
@@ -32,11 +64,21 @@ export class UserService {
     const checkUser = await this.userRepository.findOne({ where: { id: id } });
     if (checkUser === null) throw new NotFoundException('This user not found');
     const { password } = dto;
-    const equalPassword = await compare(password, checkUser.password); 
-    if (equalPassword) throw new Error('You entered the same password');
+    const equalPassword = await compare(password, checkUser.password);
+    if (equalPassword)
+      throw new HttpException(
+        { reason: 'You entered the same password!' },
+        HttpStatus.BAD_REQUEST,
+      );
     const hashed = await hash(password, CRYPT_SALT);
-    await this.userRepository.update({ password: hashed }, { where: { id: id } });
-    return await this.userRepository.findOne({ where: { id: id } });
+    await this.userRepository.update(
+      { password: hashed },
+      { where: { id: id } },
+    );
+    return await this.userRepository.findOne({
+      where: { id: id },
+      include: { all: true },
+    });
   }
 
   async removeUser(id: string): Promise<void> {
