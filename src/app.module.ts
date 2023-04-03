@@ -13,6 +13,7 @@ import { Role } from './modules/roles/role.model';
 import { RoleModule } from './modules/roles/role.module';
 import { User } from './modules/users/user.model';
 import { UserModule } from './modules/users/user.module';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     SequelizeModule.forRoot({
@@ -28,6 +29,7 @@ import { UserModule } from './modules/users/user.module';
     }),
     UserModule,
     RoleModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
