@@ -59,7 +59,7 @@ export class UserController {
   @Put(':id')
   async update(
     @Param('id') id: string,
-    @Body() updateUserDto: UpdateUserDto,
+    @Body() updateUserDto: UpdateUserDto
   ): Promise<User> {
     return await this.userService.updatePassword(id, updateUserDto);
   }
