@@ -1,12 +1,7 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-} from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { SECRET_KEY } from 'src/environments/env';
-
 
 @Injectable()
 export class RoleGuard implements CanActivate {
