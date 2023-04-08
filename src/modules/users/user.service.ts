@@ -16,7 +16,7 @@ import { RoleService } from '../roles/role.service';
 export class UserService {
   constructor(
     @InjectModel(User) private userRepository: typeof User,
-    private roleService: RoleService,
+    private roleService: RoleService
   ) {}
 
   async createUser(dto: CreateUserDto): Promise<User> {
@@ -26,7 +26,7 @@ export class UserService {
     if (isUserExists)
       throw new HttpException(
         'The user with such a username already exists!',
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     const { password } = dto;
     const role = await this.roleService.getRoleByTitle('USER');
@@ -68,12 +68,12 @@ export class UserService {
     if (equalPassword)
       throw new HttpException(
         { reason: 'You entered the same password!' },
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     const hashed = await hash(password, CRYPT_SALT);
     await this.userRepository.update(
       { password: hashed },
-      { where: { id: id } },
+      { where: { id: id } }
     );
     return await this.userRepository.findOne({
       where: { id: id },
