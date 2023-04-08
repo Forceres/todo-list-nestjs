@@ -5,11 +5,13 @@ import {
   CreatedAt,
   DataType,
   ForeignKey,
+  HasMany,
   Model,
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
 import { Role } from '../roles/role.model';
+import { List } from '../lists/list.model';
 
 interface UserCreationAttributes {
   username: string;
@@ -58,7 +60,11 @@ export class User extends Model<User, UserCreationAttributes> {
   })
   password: string;
 
-  @ApiProperty({ example: '15', description: 'The quantity of user tasks' })
+  @ApiProperty({
+    example: '15',
+    description: 'The quantity of user tasks',
+    default: 0,
+  })
   @Column({ type: DataType.INTEGER, unique: false, defaultValue: 0 })
   tasks_quantity: number;
 
@@ -123,4 +129,7 @@ export class User extends Model<User, UserCreationAttributes> {
 
   @BelongsTo(() => Role, { foreignKey: 'role_id' })
   role: Role;
+
+  @HasMany(() => List, { foreignKey: 'user_id' })
+  list: List[];
 }
