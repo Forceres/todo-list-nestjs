@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   canActivate(
-    context: ExecutionContext,
+    context: ExecutionContext
   ): boolean | Promise<boolean> | Observable<boolean> {
     return super.canActivate(context);
   }
@@ -18,7 +18,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   handleRequest(err: any, user: any, _info: any) {
     if (err || !user) {
       throw new UnauthorizedException(
-        'Unauthorized or AccessToken is invalid!',
+        'Unauthorized or AccessToken is invalid!'
       );
     }
     return user;
