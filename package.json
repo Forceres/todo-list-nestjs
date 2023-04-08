@@ -34,14 +34,13 @@
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
-    "pg": "^8.10.0",
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
     "sequelize": "^6.30.0",
     "sequelize-typescript": "^2.1.5",
     "swagger-ui-express": "^4.6.2",
-    "uuid": "^9.0.0"
+    "yaml": "^2.2.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
