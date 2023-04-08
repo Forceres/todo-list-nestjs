@@ -14,6 +14,8 @@ import { RoleModule } from './modules/roles/role.module';
 import { User } from './modules/users/user.model';
 import { UserModule } from './modules/users/user.module';
 import { AuthModule } from './auth/auth.module';
+import { ListModule } from './modules/lists/list.module';
+import { List } from './modules/lists/list.model';
 @Module({
   imports: [
     SequelizeModule.forRoot({
@@ -23,13 +25,14 @@ import { AuthModule } from './auth/auth.module';
       username: POSTGRES_USER,
       password: POSTGRES_PASSWORD,
       database: POSTGRES_DB,
-      models: [User, Role],
+      models: [User, Role, List],
       autoLoadModels: true,
       synchronize: true,
     }),
     UserModule,
     RoleModule,
     AuthModule,
+    ListModule,
   ],
   controllers: [AppController],
   providers: [AppService],
