@@ -19,7 +19,7 @@ import { AuthDto } from './dto/auth.dto';
 export class AuthService {
   constructor(
     private userService: UserService,
-    private jwtService: JwtService,
+    private jwtService: JwtService
   ) {}
 
   async validateUser(username: string, password: string): Promise<any> {
@@ -63,7 +63,7 @@ export class AuthService {
       {
         secret: SECRET_KEY,
         expiresIn: TOKEN_EXPIRATION,
-      },
+      }
     );
     return accessToken;
   }
@@ -79,7 +79,7 @@ export class AuthService {
       {
         secret: SECRET_REFRESH_KEY,
         expiresIn: REFRESH_TOKEN_EXPIRATION,
-      },
+      }
     );
     return refreshToken;
   }
