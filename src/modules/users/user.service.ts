@@ -6,11 +6,13 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { hash, compare } from 'bcrypt';
-import { CreateUserDto } from './dto/create.user.dto';
+
 import { User } from './user.model';
-import { CRYPT_SALT } from 'src/environments/env';
+import { CreateUserDto } from './dto/create.user.dto';
 import { UpdateUserDto } from './dto/update.user.dto';
 import { RoleService } from '../roles/role.service';
+
+import { CRYPT_SALT } from '../../environments/env';
 
 @Injectable()
 export class UserService {
@@ -72,7 +74,7 @@ export class UserService {
       );
     const hashed = await hash(password, CRYPT_SALT);
     await this.userRepository.update(
-      { password: hashed },
+      { password: hashed, updatedAt: new Date() },
       { where: { id: id } }
     );
     return await this.userRepository.findOne({

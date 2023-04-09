@@ -12,11 +12,13 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { UpdateUserDto } from './dto/update.user.dto';
+
 import { User } from './user.model';
 import { UserService } from './user.service';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.auth.guard';
-import { ValidationException } from 'src/common/exceptions/validation.exception';
+import { UpdateUserDto } from './dto/update.user.dto';
+
+import { ValidationException } from '../../common/exceptions/validation.exception';
+import { JwtAuthGuard } from '../../auth/guards/jwt.auth.guard';
 
 @ApiTags('Users')
 @Controller('users')

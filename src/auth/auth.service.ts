@@ -5,15 +5,17 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
+
 import { UserService } from '../modules/users/user.service';
 import { User } from '../modules/users/user.model';
+import { AuthDto } from './dto/auth.dto';
+
 import {
   REFRESH_TOKEN_EXPIRATION,
   SECRET_KEY,
   SECRET_REFRESH_KEY,
   TOKEN_EXPIRATION,
-} from 'src/environments/env';
-import { AuthDto } from './dto/auth.dto';
+} from '../environments/env';
 
 @Injectable()
 export class AuthService {

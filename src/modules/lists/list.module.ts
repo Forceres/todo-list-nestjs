@@ -1,8 +1,9 @@
 import { Module, forwardRef } from '@nestjs/common';
+import { SequelizeModule } from '@nestjs/sequelize/dist';
+
 import { List } from './list.model';
 import { ListService } from './list.service';
 import { ListController } from './list.controller';
-import { SequelizeModule } from '@nestjs/sequelize/dist';
 import { UserModule } from '../users/user.module';
 
 @Module({

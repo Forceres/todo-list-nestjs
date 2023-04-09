@@ -10,6 +10,7 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
+
 import { Role } from '../roles/role.model';
 import { List } from '../lists/list.model';
 

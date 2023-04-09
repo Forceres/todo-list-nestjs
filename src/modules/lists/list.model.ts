@@ -9,6 +9,7 @@ import {
   ForeignKey,
   BelongsTo,
 } from 'sequelize-typescript';
+
 import { User } from '../users/user.model';
 
 interface ListCreateAttributes {
