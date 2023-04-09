@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import {
   Body,
   Request,
@@ -13,11 +12,11 @@ import {
   Get,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { User } from '../modules/users/user.model';
 import { CreateUserDto } from '../modules/users/dto/create.user.dto';
 import { AuthService } from './auth.service';
+import { ValidationException } from '../common/exceptions/validation.exception';
 import { LocalAuthGuard } from './guards/local.auth.guard';
-import { User } from 'src/modules/users/user.model';
-import { ValidationException } from 'src/common/exceptions/validation.exception';
 import { JwtAuthGuard } from './guards/jwt.auth.guard';
 
 @ApiTags('Registration&Authentication&Authorization')

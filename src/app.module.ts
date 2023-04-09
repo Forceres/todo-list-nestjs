@@ -1,7 +1,16 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { User } from './modules/users/user.model';
+import { UserModule } from './modules/users/user.module';
+import { Role } from './modules/roles/role.model';
+import { RoleModule } from './modules/roles/role.module';
+import { AuthModule } from './auth/auth.module';
+import { List } from './modules/lists/list.model';
+import { ListModule } from './modules/lists/list.module';
+
 import {
   POSTGRES_HOST,
   POSTGRES_DB,
@@ -9,13 +18,6 @@ import {
   POSTGRES_PORT,
   POSTGRES_USER,
 } from './environments/env';
-import { Role } from './modules/roles/role.model';
-import { RoleModule } from './modules/roles/role.module';
-import { User } from './modules/users/user.model';
-import { UserModule } from './modules/users/user.module';
-import { AuthModule } from './auth/auth.module';
-import { ListModule } from './modules/lists/list.module';
-import { List } from './modules/lists/list.model';
 @Module({
   imports: [
     SequelizeModule.forRoot({
@@ -27,7 +29,7 @@ import { List } from './modules/lists/list.model';
       database: POSTGRES_DB,
       models: [User, Role, List],
       autoLoadModels: true,
-      synchronize: true,
+      synchronize: false,
     }),
     UserModule,
     RoleModule,
