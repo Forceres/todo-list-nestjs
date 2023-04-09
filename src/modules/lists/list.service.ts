@@ -5,6 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+
 import { List } from './list.model';
 import { CreateListDto } from './dto/create.list.dto';
 import { UpdateListDto } from './dto/update.list.dto';
