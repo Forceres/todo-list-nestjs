@@ -10,9 +10,10 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateRoleDto } from './dto/create.role.dto';
-import { RoleService } from './role.service';
+
 import { Role } from './role.model';
+import { RoleService } from './role.service';
+import { CreateRoleDto } from './dto/create.role.dto';
 
 @ApiTags('Roles')
 @Controller('roles')

@@ -14,14 +14,16 @@ import {
   NotFoundException,
   Request,
 } from '@nestjs/common';
-import { ListService } from './list.service';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+
 import { List } from './list.model';
-import { ValidationException } from 'src/common/exceptions/validation.exception';
+import { ListService } from './list.service';
 import { CreateListDto } from './dto/create.list.dto';
 import { UpdateListDto } from './dto/update.list.dto';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.auth.guard';
+import { ValidationException } from '../../common/exceptions/validation.exception';
+import { JwtAuthGuard } from '../../auth/guards/jwt.auth.guard';
 
+@ApiTags('Lists')
 @Controller('lists')
 export class ListController {
   constructor(private listService: ListService) {}

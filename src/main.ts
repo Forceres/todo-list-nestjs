@@ -2,7 +2,9 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder } from '@nestjs/swagger';
 import { SwaggerModule } from '@nestjs/swagger/dist';
+
 import { AppModule } from './app.module';
+
 import { PORT } from './environments/env';
 
 async function start() {
