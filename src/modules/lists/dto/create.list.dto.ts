@@ -9,5 +9,5 @@ export class CreateListDto {
   @IsNotEmpty({ message: 'This attribute cannot be empty!' })
   @IsString({ message: 'It must be string type!' })
   @Length(10, 40, { message: 'Title must be between 10 and 40 chars' })
-  title: string;
+  readonly title: string;
 }
