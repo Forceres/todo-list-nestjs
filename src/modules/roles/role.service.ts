@@ -9,13 +9,13 @@ export class RoleService {
   constructor(@InjectModel(Role) private roleRepository: typeof Role) {}
 
   async createRole(dto: CreateRoleDto) {
-    const role = this.roleRepository.create(dto);
+    const role = await this.roleRepository.create(dto);
     return role;
   }
 
   async getRoleByTitle(title: string) {
-    const role = this.roleRepository.findOne({ where: { title } });
-    if (!role) throw new NotFoundException('There is not such a role!');
+    const role = await this.roleRepository.findOne({ where: { title } });
+    if (!role) throw new NotFoundException('There is no such role!');
     return role;
   }
 }
