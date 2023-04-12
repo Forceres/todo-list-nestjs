@@ -1,4 +1,5 @@
 import {
+  ForbiddenException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -10,14 +11,10 @@ import { List } from './list.model';
 import { CreateListDto } from './dto/create.list.dto';
 import { UpdateListDto } from './dto/update.list.dto';
 import { User } from '../users/user.model';
-import { UserService } from '../users/user.service';
 
 @Injectable()
 export class ListService {
-  constructor(
-    @InjectModel(List) private listRepository: typeof List,
-    private userService: UserService
-  ) {}
+  constructor(@InjectModel(List) private listRepository: typeof List) {}
 
   async createList(user: User, dto: CreateListDto): Promise<List> {
     const list = await this.listRepository.create(dto);
@@ -49,9 +46,13 @@ export class ListService {
     return lists;
   }
 
-  async updateListTitle(id: string, dto: UpdateListDto): Promise<List> {
+  async updateListTitle(
+    user: User,
+    id: string,
+    dto: UpdateListDto
+  ): Promise<List> {
     const isListExists = await this.listRepository.findOne({
-      where: { id: id },
+      where: { user_id: user.id, id: id },
     });
     if (!isListExists) throw new NotFoundException('List not found!');
     this.listRepository.update({ title: dto.title }, { where: { id: id } });
@@ -61,7 +62,12 @@ export class ListService {
     });
   }
 
-  async deleteUserListById(id: string): Promise<void> {
+  async deleteUserListById(user: User, id: string): Promise<void> {
+    const listOwnership = await this.listRepository.findOne({
+      where: { user_id: user.id, id: id },
+    });
+    if (!listOwnership)
+      throw new ForbiddenException('You do not have such a list');
     const list = await this.listRepository.destroy({
       where: { id: id },
     });
