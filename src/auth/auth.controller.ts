@@ -10,6 +10,8 @@ import {
   UsePipes,
   ValidationPipe,
   Get,
+  NotFoundException,
+  Put,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from '../modules/users/user.model';
@@ -18,6 +20,8 @@ import { AuthService } from './auth.service';
 import { ValidationException } from '../common/exceptions/validation.exception';
 import { LocalAuthGuard } from './guards/local.auth.guard';
 import { JwtAuthGuard } from './guards/jwt.auth.guard';
+import { UpdateUserDto } from '../modules/users/dto/update.user.dto';
+
 
 @ApiTags('Registration&Authentication&Authorization')
 @Controller('auth')
@@ -55,7 +59,21 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   async getProfile(@Request() req) {
-    return req.user;
+    return await this.authService.getProfile(req.user);
+  }
+
+  @ApiOperation({ summary: "Update the password of the authorized user" })
+  @ApiResponse({ status: HttpStatus.OK, type: User })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, type: NotFoundException })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, type: ValidationException })
+  @UsePipes(ValidationPipe)
+  @UseGuards(JwtAuthGuard)
+  @Put('update')
+  async update(
+    @Request() req,
+    @Body() updateUserDto: UpdateUserDto
+  ): Promise<User> {
+    return await this.authService.updatePassword(req.user, updateUserDto);
   }
 
   @ApiOperation({ summary: 'Update refresh token' })
