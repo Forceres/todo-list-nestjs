@@ -1,5 +1,7 @@
-import { randomUUID } from 'crypto';
 import { QueryInterface } from 'sequelize';
+
+import { randomUUID } from 'crypto';
+
 
 export = {
   up: async (queryInterface: QueryInterface): Promise<void> => {
