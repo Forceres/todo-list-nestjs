@@ -1,10 +1,10 @@
 import { QueryInterface } from 'sequelize';
-import { DataType } from 'sequelize-typescript';
+
 import { hash } from 'bcrypt';
-import { randomUUID } from 'crypto'
+import { randomUUID } from 'crypto';
 
 import { CRYPT_SALT } from '../../environments/env';
-;
+
 
 export = {
   up: async (queryInterface: QueryInterface): Promise<void> => {
