@@ -40,24 +40,12 @@ export class User extends Model<User, UserCreationAttributes> {
     allowNull: false,
   })
   username: string;
-  // @Is("Password", (val) => {
-  //   if (!/^\w{8,64}/i.test(val)){
-  //     throw new Error("Password must be from 8 chars to 30 chars without any special chars, apart from underscore");
-  //   }
-  // })
 
   @ApiProperty({ example: 'qwerty123', description: 'Password of User' })
   @Column({
     type: DataType.STRING,
     unique: false,
     allowNull: false,
-    // set(val: string) {
-    //   if (!/^\w{8,64}/i.test(val))
-    //     throw new Error(
-    //       'Password must be from 8 chars to 30 chars without any special chars, apart from underscore'
-    //     );
-    //   this.setDataValue('password', hashSync(val, CRYPT_SALT));
-    // },
   })
   password: string;
 
@@ -68,11 +56,6 @@ export class User extends Model<User, UserCreationAttributes> {
   })
   @Column({ type: DataType.INTEGER, unique: false, defaultValue: 0 })
   tasks_quantity: number;
-
-  // @AfterUpdate
-  // static afterUpdate(instance: User){
-  //   instance.updatedAt = new Date();
-  // }
 
   @ApiProperty({
     example: '01/02/2000, 15:23:11',
