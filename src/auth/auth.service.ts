@@ -9,6 +9,7 @@ import { compare } from 'bcrypt';
 import { UserService } from '../modules/users/user.service';
 import { User } from '../modules/users/user.model';
 import { AuthDto } from './dto/auth.dto';
+import { UpdateUserDto } from '../modules/users/dto/update.user.dto';
 
 import {
   REFRESH_TOKEN_EXPIRATION,
@@ -16,6 +17,7 @@ import {
   SECRET_REFRESH_KEY,
   TOKEN_EXPIRATION,
 } from '../environments/env';
+
 
 @Injectable()
 export class AuthService {
@@ -41,6 +43,15 @@ export class AuthService {
     const accessToken = await this.generateAccessToken(user);
     const refreshToken = await this.generateRefreshToken(user);
     return { accessToken, refreshToken };
+  }
+
+  async getProfile(user: User): Promise<User> {
+    const profile = await this.userService.getUserById(user.id) 
+    return profile;
+  }
+
+  async updatePassword(user: User, dto: UpdateUserDto): Promise<User> {
+    return await this.userService.updatePassword(user.id, dto);
   }
 
   async isRefreshValid(refreshObj: { refreshToken: string }) {
