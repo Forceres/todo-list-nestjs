@@ -23,6 +23,7 @@ import { UpdateListDto } from './dto/update.list.dto';
 import { ValidationException } from '../../common/exceptions/validation.exception';
 import { JwtAuthGuard } from '../../auth/guards/jwt.auth.guard';
 
+
 @ApiTags('Lists')
 @Controller('lists')
 export class ListController {
@@ -42,7 +43,7 @@ export class ListController {
     return await this.listService.createList(req.user, createListDto);
   }
 
-  @ApiOperation({ summary: 'Get the specific list of the user by list_id' })
+  @ApiOperation({ summary: 'Get the specific list of the user by the id of the list' })
   @ApiResponse({ status: HttpStatus.OK, type: List })
   @UseGuards(JwtAuthGuard)
   @Get(':id')
@@ -60,17 +61,18 @@ export class ListController {
   }
 
   @ApiOperation({ summary: 'Update list title' })
-  @ApiResponse({ status: HttpStatus.CREATED, type: List })
+  @ApiResponse({ status: HttpStatus.OK, type: List })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, type: NotFoundException })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, type: ValidationException })
   @UsePipes(ValidationPipe)
   @UseGuards(JwtAuthGuard)
   @Put(':id')
   async update(
+    @Request() req,
     @Param('id') id: string,
     @Body() updateListDto: UpdateListDto
   ): Promise<List> {
-    return await this.listService.updateListTitle(id, updateListDto);
+    return await this.listService.updateListTitle(req, id, updateListDto);
   }
 
   @ApiOperation({ summary: 'Delete list' })
@@ -78,7 +80,7 @@ export class ListController {
   @ApiResponse({ status: HttpStatus.NOT_FOUND, type: NotFoundException })
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  async remove(@Param('id') id: string): Promise<void> {
-    return this.listService.deleteUserListById(id);
+  async remove(@Request() req, @Param('id') id: string): Promise<void> {
+    return this.listService.deleteUserListById(req.user, id);
   }
 }
