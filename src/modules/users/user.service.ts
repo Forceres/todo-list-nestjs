@@ -8,8 +8,11 @@ import { InjectModel } from '@nestjs/sequelize';
 import { hash, compare } from 'bcrypt';
 
 import { User } from './user.model';
+
 import { CreateUserDto } from './dto/create.user.dto';
 import { UpdateUserDto } from './dto/update.user.dto';
+import { UpdateRoleDto } from '../roles/dto/update.role.dto';
+
 import { RoleService } from '../roles/role.service';
 
 import { CRYPT_SALT } from '../../environments/env';
@@ -79,6 +82,18 @@ export class UserService {
     );
     return await this.userRepository.findOne({
       where: { id: id },
+      include: { all: true },
+    });
+  }
+
+  async updateUserRole(id: string, dto: UpdateRoleDto) {
+    const user = await this.userRepository.findOne({ where: { id: id }, include: {all: true} });
+    if (!user) throw new NotFoundException('This user not found');
+    if (user.role.title === dto.title) throw new HttpException('The user already has this role!', HttpStatus.BAD_REQUEST);
+    const role = await this.roleService.getRoleByTitle(dto.title);
+    user.role_id = role.id;
+    await user.save();
+    return await this.userRepository.findByPk(user.id, {
       include: { all: true },
     });
   }
