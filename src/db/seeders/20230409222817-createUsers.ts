@@ -5,7 +5,6 @@ import { randomUUID } from 'crypto';
 
 import { CRYPT_SALT } from '../../environments/env';
 
-
 export = {
   up: async (queryInterface: QueryInterface): Promise<void> => {
     const userPassword = await hash('justuser', CRYPT_SALT);

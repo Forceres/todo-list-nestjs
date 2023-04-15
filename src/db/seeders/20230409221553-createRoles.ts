@@ -1,7 +1,5 @@
 import { QueryInterface } from 'sequelize';
-
 import { randomUUID } from 'crypto';
-
 
 export = {
   up: async (queryInterface: QueryInterface): Promise<void> => {
@@ -25,7 +23,7 @@ export = {
         description: 'Full Access',
       },
     ]);
-    return
+    return;
   },
 
   async down(queryInterface: QueryInterface): Promise<object | number> {
