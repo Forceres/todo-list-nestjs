@@ -48,6 +48,11 @@ export class UserService {
   }
 
   async getUserById(id: string): Promise<User> {
+    if (id === null)
+      throw new HttpException(
+        'The id of the user is null!',
+        HttpStatus.BAD_REQUEST
+      );
     const user = await this.userRepository.findOne({
       where: { id: id },
       include: { all: true },
@@ -77,8 +82,8 @@ export class UserService {
       );
     const hashed = await hash(password, CRYPT_SALT);
     await this.userRepository.update(
-      { password: hashed, updatedAt: new Date() },
-      { where: { id: id } }
+      { password: hashed },
+      { where: { id: id }, silent: false }
     );
     return await this.userRepository.findOne({
       where: { id: id },
@@ -87,12 +92,21 @@ export class UserService {
   }
 
   async updateUserRole(id: string, dto: UpdateRoleDto) {
-    const user = await this.userRepository.findOne({ where: { id: id }, include: {all: true} });
+    const user = await this.userRepository.findOne({
+      where: { id: id },
+      include: { all: true },
+    });
     if (!user) throw new NotFoundException('This user not found');
-    if (user.role.title === dto.title) throw new HttpException('The user already has this role!', HttpStatus.BAD_REQUEST);
+    if (user.role.title === dto.title)
+      throw new HttpException(
+        'The user already has this role!',
+        HttpStatus.BAD_REQUEST
+      );
     const role = await this.roleService.getRoleByTitle(dto.title);
-    user.role_id = role.id;
-    await user.save();
+    await this.userRepository.update(
+      { role_id: role.id },
+      { where: { id: user.id }, silent: false }
+    );
     return await this.userRepository.findByPk(user.id, {
       include: { all: true },
     });
