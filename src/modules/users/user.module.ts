@@ -4,6 +4,7 @@ import { SequelizeModule } from '@nestjs/sequelize/dist';
 import { User } from './user.model';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
+
 import { RoleModule } from '../roles/role.module';
 import { AuthModule } from '../../auth/auth.module';
 import { ListModule } from '../lists/list.module';
