@@ -14,14 +14,18 @@ import {
   Put,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+
 import { User } from '../modules/users/user.model';
+
 import { CreateUserDto } from '../modules/users/dto/create.user.dto';
-import { AuthService } from './auth.service';
-import { ValidationException } from '../common/exceptions/validation.exception';
-import { LocalAuthGuard } from './guards/local.auth.guard';
-import { JwtAuthGuard } from './guards/jwt.auth.guard';
 import { UpdateUserDto } from '../modules/users/dto/update.user.dto';
 
+import { AuthService } from './auth.service';
+
+import { ValidationException } from '../common/exceptions/validation.exception';
+
+import { LocalAuthGuard } from './guards/local.auth.guard';
+import { JwtAuthGuard } from './guards/jwt.auth.guard';
 
 @ApiTags('Registration&Authentication&Authorization')
 @Controller('auth')
@@ -62,7 +66,7 @@ export class AuthController {
     return await this.authService.getProfile(req.user);
   }
 
-  @ApiOperation({ summary: "Update the password of the authorized user" })
+  @ApiOperation({ summary: 'Update the password of the authorized user' })
   @ApiResponse({ status: HttpStatus.OK, type: User })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, type: NotFoundException })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, type: ValidationException })
