@@ -88,7 +88,7 @@ export class User extends Model<User, UserCreationAttributes> {
   @Column({
     type: DataType.DATE,
     get() {
-      const date = this.getDataValue('createdAt');
+      const date = this.getDataValue('updatedAt');
       const formattedDate = new Date(date).toLocaleString('ru-RU', {
         day: 'numeric',
         month: 'numeric',
@@ -108,7 +108,9 @@ export class User extends Model<User, UserCreationAttributes> {
     description: 'Foreign Key for the role bond (UUID)',
   })
   @ForeignKey(() => Role)
-  @Column({ type: DataType.UUID })
+  @Column({
+    type: DataType.UUID,
+  })
   role_id: string;
 
   @BelongsTo(() => Role, { foreignKey: 'role_id' })
