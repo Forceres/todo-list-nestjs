@@ -9,9 +9,11 @@ services:
     volumes:
       - ./:/app
       - /app/node_modules
+      - /etc/localtime:/etc/localtime:ro
     env_file:
       - .env
     environment:
+      - TZ=Europe/Minsk
       - PORT=${PORT}
     ports:
       - ${PORT}:${PORT}
