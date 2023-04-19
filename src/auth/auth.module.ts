@@ -11,6 +11,7 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 
 import { SECRET_KEY, TOKEN_EXPIRATION } from '../environments/env';
+
 @Module({
   providers: [AuthService, LocalStrategy, JwtStrategy, JwtService],
   controllers: [AuthController],

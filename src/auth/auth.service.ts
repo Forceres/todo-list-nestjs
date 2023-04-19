@@ -6,8 +6,9 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
 
-import { UserService } from '../modules/users/user.service';
 import { User } from '../modules/users/user.model';
+import { UserService } from '../modules/users/user.service';
+
 import { AuthDto } from './dto/auth.dto';
 import { UpdateUserDto } from '../modules/users/dto/update.user.dto';
 
@@ -17,7 +18,6 @@ import {
   SECRET_REFRESH_KEY,
   TOKEN_EXPIRATION,
 } from '../environments/env';
-
 
 @Injectable()
 export class AuthService {
@@ -46,7 +46,7 @@ export class AuthService {
   }
 
   async getProfile(user: User): Promise<User> {
-    const profile = await this.userService.getUserById(user.id) 
+    const profile = await this.userService.getUserById(user.id);
     return profile;
   }
 

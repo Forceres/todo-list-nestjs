@@ -4,6 +4,7 @@ import {
   Delete,
   ForbiddenException,
   Get,
+  HttpException,
   HttpStatus,
   NotFoundException,
   Param,
@@ -13,7 +14,13 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { User } from './user.model';
 import { UserService } from './user.service';
@@ -31,41 +38,108 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @ApiOperation({ summary: 'Get all users' })
-  @ApiResponse({ status: HttpStatus.OK, type: [User] })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, type: UnauthorizedException })
-  @ApiResponse({ status: HttpStatus.FORBIDDEN, type: ForbiddenException })
-  @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: [User],
+    description: 'Successful request!',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    type: UnauthorizedException,
+    description: 'Unauthorized!',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    type: ForbiddenException,
+    description: 'Not enough access to this endpoint!',
+  })
   @Roles('ADMIN', 'MODERATOR')
-  @UseGuards(RoleGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Get()
+  @ApiBearerAuth('JWT-auth')
   async getAll(): Promise<User[]> {
     return await this.userService.getAllUsers();
   }
 
   @ApiOperation({ summary: 'Get user by id' })
-  @ApiResponse({ status: HttpStatus.OK, type: User })
-  @ApiResponse({ status: HttpStatus.NOT_FOUND, type: NotFoundException })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, type: UnauthorizedException })
-  @ApiResponse({ status: HttpStatus.FORBIDDEN, type: ForbiddenException })
-  @UseGuards(JwtAuthGuard)
+  @ApiParam({
+    name: 'id',
+    description: 'The id of the user',
+    required: true,
+    type: 'string',
+    format: 'uuid',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: User,
+    description: 'Successful request!',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    type: NotFoundException,
+    description: 'User not found!',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    type: HttpException,
+    description: 'The id has not the uuid format!',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    type: UnauthorizedException,
+    description: 'Unauthorized!',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    type: ForbiddenException,
+    description: 'Not enough access to this endpoint',
+  })
   @Roles('ADMIN', 'MODERATOR')
-  @UseGuards(RoleGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Get(':id')
+  @ApiBearerAuth('JWT-auth')
   async getById(@Param('id') id: string): Promise<User> {
     return await this.userService.getUserById(id);
   }
 
   @ApiOperation({ summary: 'Change the role of the user' })
-  @ApiResponse({ status: HttpStatus.OK, type: User })
-  @ApiResponse({ status: HttpStatus.NOT_FOUND, type: NotFoundException })
-  @ApiResponse({ status: HttpStatus.BAD_REQUEST, type: ValidationException })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, type: UnauthorizedException })
-  @ApiResponse({ status: HttpStatus.FORBIDDEN, type: ForbiddenException })
+  @ApiParam({
+    name: 'id',
+    description: 'The id of the user',
+    required: true,
+    type: 'string',
+    format: 'uuid',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: User,
+    description: 'Successful request!',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    type: NotFoundException,
+    description: 'User not found!',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    type: ValidationException,
+    description: 'Validation failed!',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    type: UnauthorizedException,
+    description: 'Unauthorized!',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    type: ForbiddenException,
+    description: 'Not enough access to this endpoint',
+  })
   @UsePipes(ValidationPipe)
-  @UseGuards(JwtAuthGuard)
   @Roles('ADMIN')
-  @UseGuards(RoleGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Put(':id')
+  @ApiBearerAuth('JWT-auth')
   async updateRole(
     @Param('id') id: string,
     @Body() updateRoleDto: UpdateRoleDto
@@ -74,14 +148,37 @@ export class UserController {
   }
 
   @ApiOperation({ summary: 'Delete user' })
-  @ApiResponse({ status: HttpStatus.OK, type: Promise<void> })
-  @ApiResponse({ status: HttpStatus.NOT_FOUND, type: NotFoundException })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, type: UnauthorizedException })
-  @ApiResponse({ status: HttpStatus.FORBIDDEN, type: ForbiddenException })
-  @UseGuards(JwtAuthGuard)
+  @ApiParam({
+    name: 'id',
+    description: 'The id of the user',
+    required: true,
+    type: 'string',
+    format: 'uuid',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: Promise<void>,
+    description: 'Successful request!',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    type: NotFoundException,
+    description: 'User not found!',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    type: UnauthorizedException,
+    description: 'Unauthorized!',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    type: ForbiddenException,
+    description: 'Not enough access to this endpoint!',
+  })
   @Roles('ADMIN')
-  @UseGuards(RoleGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Delete(':id')
+  @ApiBearerAuth('JWT-auth')
   async remove(@Param('id') id: string): Promise<void> {
     return this.userService.removeUser(id);
   }
