@@ -31,6 +31,15 @@ const POSTGRES_USER: string = process.env.POSTGRES_USER || 'postgres';
 const POSTGRES_PASSWORD: string = process.env.POSTGRES_PASSWORD || 'postgres';
 const POSTGRES_DB: string = process.env.POSTGRES_DB || 'postgres';
 
+// Log level
+const LEVELS = { error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5 };
+const LOG_LEVEL: string =
+  Object.keys(LEVELS).find((key) => LEVELS[key] === +process.env.LOG_LEVEL) ||
+  'info';
+
+// log size
+const LOG_FILE_SIZE_MB: number = +process.env.LOG_FILE_SIZE_MB || 5;
+
 export {
   POSTGRES_HOST,
   POSTGRES_PORT,
@@ -43,4 +52,7 @@ export {
   TOKEN_EXPIRATION,
   SECRET_REFRESH_KEY,
   REFRESH_TOKEN_EXPIRATION,
+  LOG_FILE_SIZE_MB,
+  LOG_LEVEL,
+  LEVELS,
 };
