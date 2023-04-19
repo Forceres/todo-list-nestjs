@@ -1,4 +1,5 @@
 import {
+  ForbiddenException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -6,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { hash, compare } from 'bcrypt';
+import { validate } from 'uuid';
 
 import { User } from './user.model';
 
@@ -28,15 +30,21 @@ export class UserService {
     const isUserExists = await this.userRepository.findOne({
       where: { username: dto.username },
     });
+
     if (isUserExists)
       throw new HttpException(
         'The user with such a username already exists!',
         HttpStatus.BAD_REQUEST
       );
+
     const { password } = dto;
     const role = await this.roleService.getRoleByTitle('USER');
     const hashed = await hash(password, CRYPT_SALT);
-    const user = await this.userRepository.create({ ...dto, password: hashed });
+    const user = await this.userRepository.create(
+      { ...dto, password: hashed },
+      { returning: true }
+    );
+
     await user.$set('role', role);
     user.role = role;
     return user;
@@ -48,15 +56,16 @@ export class UserService {
   }
 
   async getUserById(id: string): Promise<User> {
-    if (id === null)
+    if (!validate(id))
       throw new HttpException(
-        'The id of the user is null!',
+        'The id of the user is invalid!',
         HttpStatus.BAD_REQUEST
       );
-    const user = await this.userRepository.findOne({
-      where: { id: id },
+
+    const user = await this.userRepository.findByPk(id, {
       include: { all: true },
     });
+
     if (!user) throw new NotFoundException('This user not found!');
     return user;
   }
@@ -66,53 +75,77 @@ export class UserService {
       where: { username: username },
       include: { all: true },
     });
+
     if (!user) throw new NotFoundException('This user not found!');
     return user;
   }
 
   async updatePassword(id: string, dto: UpdateUserDto): Promise<User> {
-    const checkUser = await this.userRepository.findOne({ where: { id: id } });
-    if (checkUser === null) throw new NotFoundException('This user not found');
+    if (!validate(id))
+      throw new HttpException(
+        'The id of the user is invalid!',
+        HttpStatus.BAD_REQUEST
+      );
+
+    const user = await this.userRepository.findOne({
+      where: { id: id },
+      include: { all: true },
+    });
+
+    if (user === null) throw new NotFoundException('This user not found');
+
     const { password } = dto;
-    const equalPassword = await compare(password, checkUser.password);
+
+    const equalPassword = await compare(password, user.password);
+
     if (equalPassword)
       throw new HttpException(
         { reason: 'You entered the same password!' },
         HttpStatus.BAD_REQUEST
       );
+
     const hashed = await hash(password, CRYPT_SALT);
-    await this.userRepository.update(
-      { password: hashed },
-      { where: { id: id }, silent: false }
-    );
-    return await this.userRepository.findOne({
-      where: { id: id },
-      include: { all: true },
-    });
+
+    await user.update({ password: hashed }, { silent: false });
+    await user.reload();
+    return user;
   }
 
   async updateUserRole(id: string, dto: UpdateRoleDto) {
+    if (!validate(id))
+      throw new HttpException(
+        'The id of the user is invalid!',
+        HttpStatus.BAD_REQUEST
+      );
+
+    const roles = ['USER', 'MODERATOR', 'ADMIN'];
+    if (!roles.includes(dto.title))
+      throw new ForbiddenException('There is no opportunity to set this role!');
+
     const user = await this.userRepository.findOne({
       where: { id: id },
       include: { all: true },
     });
     if (!user) throw new NotFoundException('This user not found');
+
     if (user.role.title === dto.title)
       throw new HttpException(
         'The user already has this role!',
         HttpStatus.BAD_REQUEST
       );
+
     const role = await this.roleService.getRoleByTitle(dto.title);
-    await this.userRepository.update(
-      { role_id: role.id },
-      { where: { id: user.id }, silent: false }
-    );
-    return await this.userRepository.findByPk(user.id, {
-      include: { all: true },
-    });
+    await user.update({ role_id: role.id }, { silent: false });
+    await user.reload();
+    return user;
   }
 
   async removeUser(id: string): Promise<void> {
+    if (!validate(id))
+      throw new HttpException(
+        'The id of the user is invalid!',
+        HttpStatus.BAD_REQUEST
+      );
     const user = await this.userRepository.destroy({
       where: { id: id },
     });

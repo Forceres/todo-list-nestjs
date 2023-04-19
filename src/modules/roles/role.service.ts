@@ -14,7 +14,10 @@ export class RoleService {
   }
 
   async getRoleByTitle(title: string) {
-    const role = await this.roleRepository.findOne({ where: { title } });
+    const role = await this.roleRepository.findOne({
+      where: { title },
+      include: { all: true },
+    });
     if (!role) throw new NotFoundException('There is no such role!');
     return role;
   }
