@@ -8,7 +8,13 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { Role } from './role.model';
 import { RoleService } from './role.service';
@@ -24,14 +30,36 @@ export class RoleController {
   constructor(private roleService: RoleService) {}
 
   @ApiOperation({ summary: 'Getting the role by its title' })
-  @ApiResponse({ status: HttpStatus.OK, type: Role })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, type: UnauthorizedException })
-  @ApiResponse({ status: HttpStatus.FORBIDDEN, type: ForbiddenException })
-  @ApiResponse({ status: HttpStatus.NOT_FOUND, type: NotFoundException })
-  @UseGuards(JwtAuthGuard)
+  @ApiParam({
+    name: 'title',
+    description: 'The title of the role',
+    required: true,
+    type: 'string',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: Role,
+    description: 'Successful request!',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    type: UnauthorizedException,
+    description: 'Unauthorized!',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    type: ForbiddenException,
+    description: 'Not enough access to this endpoint!',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    type: NotFoundException,
+    description: 'Role not found!',
+  })
   @Roles('ADMIN', 'MODERATOR')
-  @UseGuards(RoleGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Get(':title')
+  @ApiBearerAuth('JWT-auth')
   async getRoleByTitle(@Param('title') title: string) {
     return this.roleService.getRoleByTitle(title);
   }
