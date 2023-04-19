@@ -54,7 +54,7 @@ export = {
         type: DataType.DATE,
         allowNull: false,
         get() {
-          const date = this.getDataValue('createdAt');
+          const date = this.getDataValue('updateAt');
           const formattedDate = new Date(date).toLocaleString('ru-RU', {
             day: 'numeric',
             month: 'numeric',
@@ -125,7 +125,7 @@ export = {
         type: DataType.DATE,
         allowNull: false,
         get() {
-          const date = this.getDataValue('createdAt');
+          const date = this.getDataValue('updateAt');
           const formattedDate = new Date(date).toLocaleString('ru-RU', {
             day: 'numeric',
             month: 'numeric',
@@ -157,9 +157,93 @@ export = {
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE',
     });
+
+    await queryInterface.createTable('task', {
+      id: {
+        type: DataType.UUID,
+        allowNull: false,
+        unique: true,
+        primaryKey: true,
+        defaultValue: DataType.UUIDV4,
+      },
+
+      title: { type: DataType.STRING, unique: false, allowNull: false },
+
+      description: { type: DataType.TEXT, unique: false, allowNull: false },
+
+      urgency: {
+        type: DataType.STRING,
+        unique: false,
+        allowNull: false,
+        defaultValue: 'LOW',
+      },
+
+      isDone: {
+        type: DataType.BOOLEAN,
+        unique: false,
+        allowNull: false,
+        defaultValue: false,
+      },
+
+      createdAt: {
+        type: DataType.DATE,
+        allowNull: false,
+        get() {
+          const date = this.getDataValue('createdAt');
+          const formattedDate = new Date(date).toLocaleString('ru-RU', {
+            day: 'numeric',
+            month: 'numeric',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+          });
+          return formattedDate;
+        },
+        defaultValue: DataType.NOW,
+      },
+
+      updatedAt: {
+        type: DataType.DATE,
+        allowNull: false,
+        get() {
+          const date = this.getDataValue('updateAt');
+          const formattedDate = new Date(date).toLocaleString('ru-RU', {
+            day: 'numeric',
+            month: 'numeric',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+          });
+          return formattedDate;
+        },
+        defaultValue: DataType.NOW,
+      },
+
+      list_id: {
+        type: DataType.UUID,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      },
+    });
+
+    await queryInterface.addConstraint('task', {
+      fields: ['list_id'],
+      type: 'foreign key',
+      name: 'task_list_id_fkey',
+      references: {
+        table: 'list',
+        field: 'id',
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+    });
   },
 
   down: async (queryInterface: QueryInterface): Promise<void> => {
+    await queryInterface.removeConstraint('task', 'task_list_id_fkey');
+    await queryInterface.dropTable('task');
     await queryInterface.removeConstraint('list', 'list_user_id_fkey');
     await queryInterface.dropTable('list');
     await queryInterface.removeConstraint('user', 'user_role_id_fkey');
