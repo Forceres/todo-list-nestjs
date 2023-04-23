@@ -36,7 +36,6 @@ export class UserService {
         'The user with such a username already exists!',
         HttpStatus.BAD_REQUEST
       );
-
     const { password } = dto;
     const role = await this.roleService.getRoleByTitle('USER');
     const hashed = await hash(password, CRYPT_SALT);
@@ -44,10 +43,9 @@ export class UserService {
       { ...dto, password: hashed },
       { returning: true }
     );
-
-    await user.$set('role', role);
-    user.role = role;
-    return user;
+    user.role_id = role.id;
+    const updatedUser = await user.save();
+    return updatedUser;
   }
 
   async getAllUsers(): Promise<User[]> {
