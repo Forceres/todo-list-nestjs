@@ -6,7 +6,7 @@ import { compare } from 'bcrypt';
 import request from './lib/supertest';
 import { authRoutes } from './endpoints';
 import {
-  getTokenWithUserId,
+  getToken,
   getAdminToken,
   shouldBeAdmin,
   removeUserByAdmin,
@@ -18,7 +18,7 @@ import {
 import { SECRET_KEY, SECRET_REFRESH_KEY } from '../src/environments/env';
 
 const createUserDto = {
-  username: 'TEST_USER_USER',
+  username: 'test_user_3',
   password: 'TEST_PASS_PASS',
 };
 
@@ -27,8 +27,6 @@ describe('Auth (e2e)', () => {
   const headers = { Accept: 'application/json' };
   const headersAdmin = { Accept: 'application/json' };
   let createdUserIds = [];
-  let mockUserId: string | undefined;
-
   beforeAll(async () => {
     if (shouldBeAdmin) {
       const result = await getAdminToken(req);
@@ -38,18 +36,17 @@ describe('Auth (e2e)', () => {
       const result = await getModeratorToken(req);
       headers['Authorization'] = result.token;
     } else if (shouldBeUser) {
-      const result = await getTokenWithUserId(req);
+      const result = await getToken(req);
       headers['Authorization'] = result.token;
-      mockUserId = result.mockUserId;
     }
   });
 
   afterAll(async () => {
-    if (mockUserId) {
-      await removeUserByAdmin(req, mockUserId, headersAdmin);
-    }
     if (headers['Authorization']) {
       delete headers['Authorization'];
+    }
+    if (headersAdmin['Authorization']) {
+      delete headersAdmin['Authorization'];
     }
   });
 
