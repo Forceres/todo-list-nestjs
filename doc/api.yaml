@@ -1,0 +1,1037 @@
+openapi: 3.0.0
+paths:
+  /users:
+    get:
+      operationId: UserController_getAll
+      summary: Get all users
+      parameters: []
+      responses:
+        '200':
+          description: Successful request!
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedException'
+        '403':
+          description: Not enough access to this endpoint!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenException'
+      tags: &ref_0
+        - Users
+      security:
+        - JWT-auth: []
+  /users/{id}:
+    get:
+      operationId: UserController_getById
+      summary: Get user by id
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The id of the user
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          description: Successful request!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: The id has not the uuid format!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpException'
+        '401':
+          description: Unauthorized!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedException'
+        '403':
+          description: Not enough access to this endpoint
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenException'
+        '404':
+          description: User not found!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+      tags: *ref_0
+      security:
+        - JWT-auth: []
+    put:
+      operationId: UserController_updateRole
+      summary: Change the role of the user
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The id of the user
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRoleDto'
+      responses:
+        '200':
+          description: Successful request!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Validation failed!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationException'
+        '401':
+          description: Unauthorized!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedException'
+        '403':
+          description: Not enough access to this endpoint
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenException'
+        '404':
+          description: User not found!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+      tags: *ref_0
+      security:
+        - JWT-auth: []
+    delete:
+      operationId: UserController_remove
+      summary: Delete user
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The id of the user
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          description: Successful request!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Promise'
+        '401':
+          description: Unauthorized!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedException'
+        '403':
+          description: Not enough access to this endpoint!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenException'
+        '404':
+          description: User not found!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+      tags: *ref_0
+      security:
+        - JWT-auth: []
+  /roles/{title}:
+    get:
+      operationId: RoleController_getRoleByTitle
+      summary: Getting the role by its title
+      parameters:
+        - name: title
+          required: true
+          in: path
+          description: The title of the role
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful request!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+        '401':
+          description: Unauthorized!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedException'
+        '403':
+          description: Not enough access to this endpoint!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenException'
+        '404':
+          description: Role not found!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+      tags:
+        - Roles
+      security:
+        - JWT-auth: []
+  /auth/signup:
+    post:
+      operationId: AuthController_signUp
+      summary: Registration
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserDto'
+      responses:
+        '201':
+          description: Successful request!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Validation failed!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationException'
+      tags: &ref_1
+        - Registration&Authentication&Authorization
+  /auth/signin:
+    post:
+      operationId: AuthController_signIn
+      summary: Authorization
+      parameters: []
+      responses:
+        '201':
+          description: Successful request!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedException'
+      tags: *ref_1
+  /auth/profile:
+    get:
+      operationId: AuthController_getProfile
+      summary: Information about authorized user
+      parameters: []
+      responses:
+        '200':
+          description: Successful request!
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedException'
+      tags: *ref_1
+      security:
+        - JWT-auth: []
+  /auth/update:
+    put:
+      operationId: AuthController_update
+      summary: Update the password of the authorized user
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserDto'
+      responses:
+        '200':
+          description: Successful request!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Validation failed!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationException'
+        '401':
+          description: Unauthorized!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedException'
+      tags: *ref_1
+      security:
+        - JWT-auth: []
+  /auth/refresh:
+    post:
+      operationId: AuthController_refresh
+      summary: Update accessToken
+      parameters: []
+      responses:
+        '200':
+          description: Successful request!
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthorized!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedException'
+      tags: *ref_1
+  /lists:
+    post:
+      operationId: ListController_create
+      summary: List creation
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateListDto'
+      responses:
+        '201':
+          description: Successful request!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/List'
+        '400':
+          description: Validation failed!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationException'
+        '401':
+          description: Unauthorized!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedException'
+      tags: &ref_2
+        - Lists
+      security:
+        - JWT-auth: []
+    get:
+      operationId: ListController_getAll
+      summary: Get all user lists by user_id
+      parameters: []
+      responses:
+        '200':
+          description: Successful request!
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/List'
+        '401':
+          description: Unauthorized!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedException'
+      tags: *ref_2
+      security:
+        - JWT-auth: []
+  /lists/{id}:
+    get:
+      operationId: ListController_getOne
+      summary: Get the specific list of the user by the id of the list
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The id of the list
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          description: Successful request!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/List'
+        '400':
+          description: The id has not uuid format!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpException'
+        '401':
+          description: Unauthorized!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedException'
+      tags: *ref_2
+      security:
+        - JWT-auth: []
+    put:
+      operationId: ListController_update
+      summary: Update list title
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The id of the list
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateListDto'
+      responses:
+        '200':
+          description: Successful request!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/List'
+        '400':
+          description: Validation failed!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationException'
+        '401':
+          description: Unauthorized!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedException'
+        '404':
+          description: List not found!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+      tags: *ref_2
+      security:
+        - JWT-auth: []
+    delete:
+      operationId: ListController_remove
+      summary: Delete list
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The id of the list
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          description: Successful request!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Promise'
+        '400':
+          description: The id has not uuid format!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpException'
+        '401':
+          description: Unauthorized!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedException'
+        '404':
+          description: List not found!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+      tags: *ref_2
+      security:
+        - JWT-auth: []
+  /tasks/{list_id}:
+    post:
+      operationId: TaskController_create
+      summary: Task creation
+      parameters:
+        - name: list_id
+          required: true
+          in: path
+          description: The id of the list
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTaskDto'
+      responses:
+        '201':
+          description: Successful request!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: Validation failed!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationException'
+        '401':
+          description: Unauthorized!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedException'
+        '404':
+          description: List not found!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+      tags: &ref_3
+        - Tasks
+      security:
+        - JWT-auth: []
+  /tasks/{id}:
+    get:
+      operationId: TaskController_getOne
+      summary: Get the specific user task by the id of the task
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The id of the task
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          description: Successful request!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: The task_id has not uuid format!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpException'
+        '401':
+          description: Unauthorized!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedException'
+        '404':
+          description: Task not found!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+      tags: *ref_3
+      security:
+        - JWT-auth: []
+    put:
+      operationId: TaskController_update
+      summary: Update 1-4 attributes of the task
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The id of the task
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTaskDto'
+      responses:
+        '200':
+          description: Successful request!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: Validation failed!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationException'
+        '401':
+          description: Unauthorized!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedException'
+        '404':
+          description: Task not found!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+      tags: *ref_3
+      security:
+        - JWT-auth: []
+    delete:
+      operationId: TaskController_remove
+      summary: Delete the specific task by the id
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The id of the task
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          description: Successful request!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Promise'
+        '400':
+          description: The task_id has not uuid format!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpException'
+        '401':
+          description: Unauthorized!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedException'
+        '404':
+          description: Task not found!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+      tags: *ref_3
+      security:
+        - JWT-auth: []
+  /tasks/all/{list_id}:
+    get:
+      operationId: TaskController_getAll
+      summary: Get all user tasks by the id of the list
+      parameters:
+        - name: list_id
+          required: true
+          in: path
+          description: The id of the list
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          description: Successful request!
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+        '400':
+          description: The list_id has not uuid format!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpException'
+        '401':
+          description: Unauthorized!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedException'
+        '404':
+          description: List not found!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+      tags: *ref_3
+      security:
+        - JWT-auth: []
+info:
+  title: TODO List
+  description: Documentation
+  version: 1.0.0
+  contact:
+    name: forceres
+    url: https://github.com/Forceres
+    email: ilya.sereda.2001@gmail.com
+tags: []
+servers: []
+components:
+  securitySchemes:
+    JWT-auth:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+      name: JWT
+      description: Enter JWT token
+      in: header
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1c6e6134-7d4a-4b39-8ca4-4d53fddf16f2
+          description: UUIDV4 as UserId (PK)
+        username:
+          type: string
+          example: MaximKalin
+          description: Nickname of the user
+        password:
+          type: string
+          example: qwerty123
+          description: Password of User
+        tasks_quantity:
+          type: number
+          example: '15'
+          description: The quantity of user tasks
+          default: 0
+        createdAt:
+          format: date-time
+          type: string
+          example: 01/02/2000, 15:23:11
+          description: Date and time of creation
+        updatedAt:
+          format: date-time
+          type: string
+          example: 01/02/2000, 15:23:11
+          description: Date and time of update
+        role_id:
+          type: string
+          example: 1c6e6134-7d4a-4b39-8ca4-4d53fddf16f2
+          description: Foreign Key for the role bond (UUID)
+      required:
+        - id
+        - username
+        - password
+        - tasks_quantity
+        - createdAt
+        - updatedAt
+        - role_id
+    UnauthorizedException:
+      type: object
+      properties:
+        message:
+          type: string
+        status:
+          type: integer
+          enum: [401]
+      required:
+        - message
+        - status
+    ForbiddenException:
+      type: object
+      properties:
+        message:
+          type: string
+        status:
+          type: integer
+          enum: [403]
+      required:
+        - message
+        - status
+    HttpException:
+      type: object
+      properties:
+        message:
+          type: string
+        status:
+          type: integer
+      required:
+        - message
+        - status
+    NotFoundException:
+      type: object
+      properties:
+        message:
+          type: string
+        status:
+          type: integer
+          enum: [404]
+      required:
+        - message
+        - status
+    UpdateRoleDto:
+      type: object
+      properties:
+        title:
+          type: string
+          example: MODERATOR
+          description: The title of the role
+      required:
+        - title
+    ValidationException:
+      allOf:
+        - $ref: '#/components/schemas/HttpException'
+        - type: object
+          properties:
+            message:
+              type: string
+            status:
+              type: number
+              example: 400
+    Promise:
+      type: object
+      properties:
+        type:
+          type: string
+          example: 'void'
+    Role:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1c6e6134-7d4a-4b39-8ca4-4d53fddf16f2
+          description: UUIDV4 as RoleId (PK)
+        title:
+          type: string
+          example: ADMIN
+          description: Name of Role
+        description:
+          type: string
+          example: Administator with full rights
+          description: Short information of Role
+      required:
+        - id
+        - title
+        - description
+    CreateUserDto:
+      type: object
+      properties:
+        username:
+          type: string
+          example: username98
+          description: Nickname P.S. Login
+        password:
+          type: string
+          example: qwerty123
+          description: User's password
+      required:
+        - username
+        - password
+    UpdateUserDto:
+      type: object
+      properties:
+        password:
+          type: string
+          example: qwerty123
+          description: User's password
+      required:
+        - password
+    CreateListDto:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Work List
+          description: Short title for your List of Tasks
+      required:
+        - title
+    List:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1c6e6134-7d4a-4b39-8ca4-4d53fddf16f2
+          description: UUIDV4 as ListId (PK)
+        title:
+          type: string
+          example: Specific Work Tasks
+          description: Short title for your List of Tasks
+        tasks_quantity:
+          type: number
+          example: '15'
+          description: The quantity of list tasks
+          default: 0
+        createdAt:
+          format: date-time
+          type: string
+          example: 01/02/2000, 15:23:11
+          description: Date and time of creation
+        updatedAt:
+          format: date-time
+          type: string
+          example: 01/02/2000, 15:23:11
+          description: Date and time of update
+        user_id:
+          type: string
+          example: 1c6e6134-7d4a-4b39-8ca4-4d53fddf16f2
+          description: Foreign Key for the user bond (UUID)
+      required:
+        - id
+        - title
+        - tasks_quantity
+        - createdAt
+        - updatedAt
+        - user_id
+    UpdateListDto:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Work List
+          description: Short title for your List of Tasks
+      required:
+        - title
+    CreateTaskDto:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Fixing up the bug
+          description: Short title of the task
+        description:
+          type: string
+          example: >-
+            Company XYZ wants to update the design of its website to improve its
+            appearance and increase user appeal. The new design should be
+            modern, attractive, and user-friendly. It is necessary to create a
+            design that will correspond to the company brand and goals
+          description: Full description of the task
+        urgency:
+          type: string
+          example: LOW
+          description: The extent of the task urgency
+      required:
+        - title
+        - description
+    Task:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1c6e6134-7d4a-4b39-8ca4-4d53fddf16f2
+          description: UUIDV4 as TaskId (PK)
+        title:
+          type: string
+          example: Fixing up the bug
+          description: Short title of the task
+        description:
+          type: string
+          example: >-
+            Company XYZ wants to update the design of its website to improve its
+            appearance and increase user appeal. The new design should be
+            modern, attractive, and user-friendly. It is necessary to create a
+            design that will correspond to the company brand and goals
+          description: Full description of the task
+        urgency:
+          type: string
+          example: LOW
+          description: The extent of the task urgency
+          default: LOW
+        isDone:
+          type: boolean
+          example: false
+          description: The state of completion
+          default: false
+        createdAt:
+          format: date-time
+          type: string
+          example: 01/02/2000, 15:23:11
+          description: Date and time of creation
+        updatedAt:
+          format: date-time
+          type: string
+          example: 01/02/2000, 15:23:11
+          description: Date and time of update
+        list_id:
+          type: string
+          example: 1c6e6134-7d4a-4b39-8ca4-4d53fddf16f2
+          description: Foreign Key for the user bond (UUID)
+      required:
+        - id
+        - title
+        - description
+        - urgency
+        - isDone
+        - createdAt
+        - updatedAt
+        - list_id
+    UpdateTaskDto:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Fixing up the bug
+          description: Short title of the task
+        description:
+          type: string
+          example: >-
+            Company XYZ wants to update the design of its website to improve its
+            appearance and increase user appeal. The new design should be
+            modern, attractive, and user-friendly. It is necessary to create a
+            design that will correspond to the company brand and goals
+          description: Full description of the task
+        urgency:
+          type: string
+          example: LOW
+          description: The extent of the task urgency
+        isDone:
+          type: boolean
+          example: false
+          description: The state of completion
