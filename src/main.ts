@@ -3,12 +3,13 @@ import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
 import { SwaggerModule } from '@nestjs/swagger/dist';
-import { DocumentBuilder } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
 
 import { PORT } from './environments/env';
 import { LoggerService } from './common/logger/logger.service';
+import * as jsYaml from 'js-yaml';
+import { readFileSync } from 'fs';
 
 async function start() {
   try {
@@ -16,29 +17,11 @@ async function start() {
       bufferLogs: true,
       logger: new LoggerService(),
     });
+    const swaggerYaml = readFileSync('doc/api.yaml', 'utf8');
 
-    const configuration = new DocumentBuilder()
-      .setTitle('TODO List')
-      .setDescription('Documentation')
-      .setContact(
-        'forceres',
-        'https://github.com/Forceres',
-        'ilya.sereda.2001@gmail.com'
-      )
-      .addBearerAuth(
-        {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT',
-          name: 'JWT',
-          description: 'Enter JWT token',
-          in: 'header',
-        },
-        'JWT-auth'
-      )
-      .build();
-    const documentation = SwaggerModule.createDocument(app, configuration);
-    SwaggerModule.setup('/api/doc', app, documentation);
+    const document = jsYaml.load(swaggerYaml);
+
+    SwaggerModule.setup('/api/doc', app, document);
 
     await app.listen(PORT, () => {
       Logger.log(`Server started on PORT: ${PORT}`);
