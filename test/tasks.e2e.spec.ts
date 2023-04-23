@@ -4,10 +4,9 @@ import { validate } from 'uuid';
 import request from './lib/supertest';
 import { authRoutes, listRoutes, tasksRoutes } from './endpoints';
 import {
-  getTokenWithUserId,
+  getToken,
   getAdminToken,
   shouldBeAdmin,
-  removeUserByAdmin,
   shouldBeUser,
   shouldBeModerator,
   getModeratorToken,
@@ -37,7 +36,6 @@ describe('Tasks (e2e)', () => {
   const headersAdmin = { Accept: 'application/json' };
   let createdListIds = [];
   let createdTaskIds = [];
-  let mockUserId: string | undefined;
 
   beforeAll(async () => {
     if (shouldBeAdmin) {
@@ -48,18 +46,17 @@ describe('Tasks (e2e)', () => {
       const result = await getModeratorToken(req);
       headers['Authorization'] = result.token;
     } else if (shouldBeUser) {
-      const result = await getTokenWithUserId(req);
+      const result = await getToken(req);
       headers['Authorization'] = result.token;
-      mockUserId = result.mockUserId;
     }
   });
 
   afterAll(async () => {
-    if (mockUserId) {
-      await removeUserByAdmin(req, mockUserId, headersAdmin);
-    }
     if (headers['Authorization']) {
       delete headers['Authorization'];
+    }
+    if (headersAdmin['Authorization']) {
+      delete headersAdmin['Authorization'];
     }
   });
 
