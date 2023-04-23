@@ -1,16 +1,17 @@
 import { getAdminToken } from './getAdminToken';
 import { getModeratorToken } from './getModeratorToken';
-import { getTokenWithUserId } from './getTokenWithUserId';
+import { getToken } from './getToken';
 import { removeListById } from './removeListById';
 import { removeTaskById } from './removeTaskById';
 import { removeUserByAdmin } from './removeUserByAdmin';
 import shouldBeAdmin from './shouldBeAdmin';
 import shouldBeModerator from './shouldBeModerator';
 import shouldBeUser from './shouldBeUser';
+import { signUpUser } from './signUpUser';
 
 export {
   getAdminToken,
-  getTokenWithUserId,
+  getToken,
   shouldBeAdmin,
   removeUserByAdmin,
   shouldBeModerator,
@@ -18,4 +19,5 @@ export {
   getModeratorToken,
   removeListById,
   removeTaskById,
+  signUpUser,
 };
