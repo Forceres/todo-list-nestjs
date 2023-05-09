@@ -3,7 +3,7 @@ import { config } from 'dotenv';
 
 config();
 
-const host = `localhost:${process.env.PORT || 4000}`;
+const host = `localhost:${process.env.PORT}`;
 const _request = supertest(host);
 
 export default _request;
