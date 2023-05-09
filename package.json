@@ -22,7 +22,7 @@
     "test:moderator": "cross-env ACCESS=MODERATOR jest --config ./test/jest-e2e.json",
     "test:admin": "cross-env ACCESS=ADMIN jest --config ./test/jest-e2e.json",
     "test:watch": "jest --watch",
-    "test:cov": "cross-env ACCESS=ADMIN jest --coverage --config ./test/jest-e2e.json",
+    "test:cov": "cross-env ACCESS=USER jest --coverage --config ./test/jest-e2e.json",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand"
   },
   "dependencies": {
@@ -32,6 +32,7 @@
     "@nestjs/passport": "^9.0.3",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/sequelize": "^9.0.0",
+    "@nestjs/serve-static": "^3.0.1",
     "@nestjs/swagger": "^6.2.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
