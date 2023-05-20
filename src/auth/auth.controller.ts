@@ -14,6 +14,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiExcludeEndpoint,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -134,5 +135,17 @@ export class AuthController {
   @Post('refresh')
   async refresh(@Request() req): Promise<object> {
     return await this.authService.isRefreshValid(req.body);
+  }
+
+  @ApiExcludeEndpoint()
+  @Get('check')
+  async checkJWT(@Request() req): Promise<object> {
+    return await this.authService.checkJWT(req);
+  }
+
+  @ApiExcludeEndpoint()
+  @Get('check/role')
+  async checkRole(@Request() req): Promise<object> {
+    return await this.authService.checkRole(req);
   }
 }
