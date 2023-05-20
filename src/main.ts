@@ -21,7 +21,7 @@ async function start() {
 
     const document = jsYaml.load(swaggerYaml);
 
-    SwaggerModule.setup('/doc/api', app, document);
+    SwaggerModule.setup('/api/doc', app, document);
 
     await app.listen(PORT, () => {
       Logger.log(`Server started on PORT: ${PORT}`);

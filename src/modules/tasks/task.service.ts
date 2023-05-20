@@ -43,7 +43,7 @@ export class TaskService {
       include: { all: true },
     });
     if (!task)
-      throw new HttpException('List is not created!', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Task is not created!', HttpStatus.BAD_REQUEST);
     task.list_id = list.id;
     const currentTask = await task.save();
     return currentTask;
@@ -88,7 +88,12 @@ export class TaskService {
         'The id of the user is invalid!',
         HttpStatus.BAD_REQUEST
       );
-    if (!dto.description && !dto.title && !dto.urgency)
+    if (
+      !dto.description &&
+      !dto.title &&
+      !dto.urgency &&
+      typeof dto.isDone !== 'boolean'
+    )
       throw new HttpException(
         'You passed 0 args to update!',
         HttpStatus.BAD_REQUEST
