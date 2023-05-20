@@ -71,6 +71,7 @@ export class ListService {
       );
     const list = await this.listRepository.findOne({
       where: { user_id: user.id, id: id },
+      include: { all: true },
     });
     if (!list) throw new NotFoundException('List not found!');
     await list.update({ title: dto.title }, { silent: false });

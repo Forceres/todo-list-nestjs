@@ -35,6 +35,43 @@ export class AuthService {
     return null;
   }
 
+  async checkRole(req): Promise<object> {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      return { success: false, message: 'No token provided' };
+    }
+    try {
+      const decodedToken = await this.jwtService.verifyAsync(token, {
+        secret: SECRET_KEY,
+      });
+      if (
+        decodedToken.role.title === 'MODERATOR' ||
+        decodedToken.role.title === 'ADMIN'
+      ) {
+        return { success: true, message: 'Access permitted' };
+      }
+    } catch (err) {
+      return { success: false, message: 'Access denied' };
+    }
+  }
+
+  async checkJWT(req): Promise<object> {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      return { success: false, message: 'No token provided' };
+    }
+    try {
+      const decodedToken = await this.jwtService.verifyAsync(token, {
+        secret: SECRET_KEY,
+      });
+      if (decodedToken) {
+        return { success: true, message: 'Token is valid' };
+      }
+    } catch (err) {
+      return { success: false, message: 'Invalid token' };
+    }
+  }
+
   async signUp(authDto: AuthDto): Promise<any> {
     return await this.userService.createUser(authDto);
   }
