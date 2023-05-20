@@ -1,0 +1,174 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Lists</title>
+    <style>
+      body {
+        padding-top: 60px;
+        background: linear-gradient(to bottom, #6c757d, #ffffff);
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-secondary fixed-top">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <i
+              class="nav-link bi bi-house"
+              style="font-size: 1.7rem"
+              id="main"
+              href="#"
+            ></i>
+          </li>
+          <li
+            class="nav-item active"
+            id="manageButtonContainer"
+            style="display: none"
+          >
+            <a
+              class="nav-link"
+              href="#"
+              id="manage"
+              onclick="checkJWT('../manage/manage.html')"
+              >Manage tasks</a
+            >
+          </li>
+          <li
+            class="nav-item"
+            id="accountButtonContainer"
+            style="display: none"
+          >
+            <a
+              class="nav-link"
+              href="#"
+              id="account"
+              onclick="checkJWT('../profile/profile.html')"
+              >My account</a
+            >
+          </li>
+          <li
+            class="nav-item"
+            id="credentialsButtonContainer"
+            style="display: none"
+          >
+            <a
+              class="nav-link"
+              href="#"
+              id="credentials"
+              onclick="checkJWT('../credentials/credentials.html')"
+              >Credentials</a
+            >
+          </li>
+          <li class="nav-item" id="panelButtonContainer" style="display: none">
+            <a class="nav-link" href="#" id="panelButton">Special panel</a>
+          </li>
+          <li
+            class="nav-item"
+            id="signOutButtonContainer"
+            style="display: none"
+          >
+            <i
+              class="bi bi-box-arrow-left nav-link"
+              style="font-size: 1.7rem"
+              href="#"
+              id="signOutButton"
+            ></i>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="modal fade" id="listModal">
+      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"></h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <div class="container-fluid text-center">
+              <div class="d-flex justify-content-between align-items-center">
+                <button
+                  type="button"
+                  class="btn btn-secondary w-100"
+                  data-bs-dismiss="modal"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container my-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <h1 class="mb-4" align="center">Lists info</h1>
+          <ul class="list-group mb-4" id="profile"></ul>
+          <h2 class="mb-4" align="center">Lists</h2>
+          <ul class="list-group">
+            <li class="list-group-item">
+              <ul class="list-unstyled" id="lists"></ul>
+              <nav aria-label="...">
+                <ul
+                  class="pagination justify-content-center"
+                  id="pagination"
+                ></ul>
+              </nav>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <footer class="footer fixed-bottom">
+      <div class="container-fluid">
+        <p>&copy; 2023 forceres, Inc.</p>
+      </div>
+    </footer>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="../utils/checkJWT.js"></script>
+    <script src="../utils/signOut.js"></script>
+    <script src="../utils/account.js"></script>
+    <script src="../utils/credentials.js"></script>
+    <script src="../utils/manage.js"></script>
+    <script src="../utils/main.js"></script>
+    <script src="../utils/specialPanel.js"></script>
+    <script src="lists.js"></script>
+  </body>
+</html>
