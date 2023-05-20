@@ -132,7 +132,7 @@ export class AuthController {
     description: 'Unauthorized!',
   })
   @Post('refresh')
-  async refresh(@Request() req) {
+  async refresh(@Request() req): Promise<object> {
     return await this.authService.isRefreshValid(req.body);
   }
 }
