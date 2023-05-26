@@ -211,8 +211,10 @@ function renderPagination(currentPageIndex) {
       `;
 }
 
-function remove(title) {
-  const list_id = lists.find((list) => list.title === title).id;
+function remove(id) {
+  const list_id = lists.find(
+    (list) => list.id === id.getAttribute('data-list-id')
+  ).id;
   axios
     .delete('/lists/' + list_id, {
       headers: {
@@ -272,7 +274,7 @@ function createEditBtn() {
   return editBtn;
 }
 
-function edit(title) {
+function edit(id) {
   const listModalEl = document.getElementById('listModal');
   const originalModalContent = listModalEl.innerHTML;
   listModalEl.addEventListener('hidden.bs.modal', function () {
@@ -280,7 +282,10 @@ function edit(title) {
   });
   const editTitleBtn = document.querySelector('#edit');
   editTitleBtn.disabled = true;
-  const list_id = lists.find((list) => list.title === title).id;
+  const list_id = lists.find(
+    (list) => list.id === id.getAttribute('data-list-id')
+  ).id;
+  console.log(list_id);
   let modalTitleEl = document.querySelector('#listModal .modal-title');
   let modalFooterEl = document.querySelector('#listModal .modal-footer');
   const form = document.createElement('form');
@@ -335,7 +340,7 @@ function edit(title) {
       .then((response) => {
         listModalEl.innerHTML = originalModalContent;
         lists = lists.map((list) => {
-          if (list.title === modalTitleEl.textContent) list = response.data;
+          if (list.id === list_id) list = response.data;
           return list;
         });
         modalTitleEl = listModalEl.querySelector('.modal-title');
@@ -380,8 +385,10 @@ function edit(title) {
   modalFooterEl.appendChild(outerContainer);
 }
 
-function create(title) {
-  const currentListId = lists.find((list) => list.title === title).id;
+function create(id) {
+  const currentListId = lists.find(
+    (list) => list.id === id.getAttribute('data-list-id')
+  ).id;
   localStorage.setItem('list_id', currentListId);
   window.location.replace('taskForm.html');
 }
