@@ -131,7 +131,7 @@
                 <button
                   type="button"
                   class="btn btn-primary w-50 me-1"
-                  onclick="remove(document.querySelector('#listModal .modal-title').textContent)"
+                  onclick="remove(document.querySelector('button[data-list-id]'))"
                 >
                   Delete
                 </button>
@@ -139,7 +139,7 @@
                   type="button"
                   class="btn btn-primary w-50"
                   id="edit"
-                  onclick="edit(document.querySelector('#listModal .modal-title').textContent)"
+                  onclick="edit(document.querySelector('button[data-list-id]'))"
                 >
                   Edit title
                 </button>
