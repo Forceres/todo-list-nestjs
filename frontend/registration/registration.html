@@ -1,0 +1,215 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Registration</title>
+    <style>
+      body {
+        padding-top: 40px;
+        background: linear-gradient(to bottom, #6c757d, #ffffff);
+      }
+    </style>
+  </head>
+  <body>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <nav class="navbar navbar-expand-lg navbar-light bg-secondary fixed-top">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <i
+              class="nav-link bi bi-house"
+              style="font-size: 1.7rem"
+              id="main"
+              href="#"
+            ></i>
+          </li>
+          <li
+            class="nav-item active"
+            id="manageButtonContainer"
+            style="display: none"
+          >
+            <a
+              class="nav-link"
+              href="#"
+              id="manage"
+              onclick="checkJWT('../manage/manage.html')"
+              >Manage tasks</a
+            >
+          </li>
+          <li
+            class="nav-item"
+            id="accountButtonContainer"
+            style="display: none"
+          >
+            <a
+              class="nav-link"
+              href="#"
+              id="account"
+              onclick="checkJWT('../profile/profile.html')"
+              >My account</a
+            >
+          </li>
+          <li
+            class="nav-item"
+            id="credentialsButtonContainer"
+            style="display: none"
+          >
+            <a
+              class="nav-link"
+              href="#"
+              id="credentials"
+              onclick="checkJWT('../credentials/credentials.html')"
+              >Credentials</a
+            >
+          </li>
+          <li class="nav-item" id="panelButtonContainer" style="display: none">
+            <a class="nav-link" href="#" id="panelButton">Special panel</a>
+          </li>
+          <li
+            class="nav-item"
+            id="signOutButtonContainer"
+            style="display: none"
+          >
+            <i
+              class="bi bi-box-arrow-left nav-link"
+              style="font-size: 1.7rem"
+              href="#"
+              id="signOutButton"
+            ></i>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="d-flex flex-column min-vh-100 justify-content-center">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12 col-md-10 mx-auto bg-white rounded shadow">
+              <div class="row">
+                <div class="col-md-6">
+                  <div>
+                    <img
+                      src="../img/sign_up_2.svg"
+                      alt="Sign In"
+                      class="img-fluid p-5"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="m-5 text-center"><h1>Create Your TODO List Account!</h1></div>
+                  <form class="m-5" id="registerForm">
+                    <div class="mb-3 form-group has-validation">
+                      <label for="username">Username</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="username"
+                        name="username"
+                        placeholder="Enter username"
+                        required
+                        pattern="\w{8,25}"
+                      />
+                      <div class="invalid-feedback">
+                        Username must be 8-25 characters long and can only
+                        contain letters, numbers, and underscores.
+                      </div>
+                    </div>
+                    <div class="mb-3 form-group has-validation">
+                      <label for="password">Password</label>
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="password"
+                        name="password"
+                        placeholder="Enter password"
+                        required
+                        pattern="\w{8,30}"
+                      />
+                      <div class="invalid-feedback">
+                        Password must be 8-30 characters long and can only
+                        contain letters, numbers, and underscores.
+                      </div>
+                    </div>
+                    <div class="mb-3 form-group has-validation">
+                      <label for="password-validate">Password</label>
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="password-validate"
+                        name="password-validate"
+                        placeholder="Enter your password repeatedly"
+                      />
+                      <div class="invalid-feedback">
+                        Passwords are not the same!
+                      </div>
+                    </div>
+                    <div
+                      class="form-group d-flex justify-content-between flex-column mt-1 mb-1"
+                    >
+                      <button
+                        type="submit"
+                        class="btn btn-primary mt-3 w-100"
+                        id="submitBtn"
+                      >
+                        Sign Up
+                      </button>
+                      <a
+                        href="../auth/auth.html"
+                        class="btn btn-secondary mt-2 w-100"
+                        >Sign In</a
+                      >
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="footer fixed-bottom">
+      <div class="container-fluid">
+        <p>&copy; 2023 forceres, Inc.</p>
+      </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="../utils/checkJWT.js"></script>
+    <script src="../utils/signOut.js"></script>
+    <script src="../utils/account.js"></script>
+    <script src="../utils/credentials.js"></script>
+    <script src="../utils/manage.js"></script>
+    <script src="../utils/main.js"></script>
+    <script src="../utils/specialPanel.js"></script>
+    <script src="validate-password.js"></script>
+    <script src="validate-passwords.js"></script>
+    <script src="validate-username.js"></script>
+    <script src="registration.js"></script>
+  </body>
+</html>

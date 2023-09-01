@@ -17,12 +17,14 @@
     "sequelize:seeds:run": "ts-node --files -r tsconfig-paths/register node_modules/sequelize-cli/lib/sequelize db:seed:all --config ./src/db/config/config.mjs --seeders-path ./src/db/seeders",
     "sequelize:seeds:undo": "ts-node --files -r tsconfig-paths/register node_modules/sequelize-cli/lib/sequelize db:seed:undo:all --config ./src/db/config/config.mjs --seeders-path ./src/db/seeders",
     "migration:revert": "npm run sequelize:seeds:undo && ts-node --files -r tsconfig-paths/register node_modules/sequelize-cli/lib/sequelize db:migrate:undo --config ./src/db/config/config.mjs --migrations-path ./src/db/migrations",
+    "app:start:local": "npm run sequelize:migration:run && npm run sequelize:seeds:run && npm run start",
     "app:start": "npm run sequelize:migration:run && npm run sequelize:seeds:run && npm run start:dev",
+    "app:start:prod": "npm run sequelize:migration:run && npm run sequelize:seeds:run && npm run start:prod",
     "test:user": "cross-env ACCESS=USER jest --config ./test/jest-e2e.json",
     "test:moderator": "cross-env ACCESS=MODERATOR jest --config ./test/jest-e2e.json",
     "test:admin": "cross-env ACCESS=ADMIN jest --config ./test/jest-e2e.json",
     "test:watch": "jest --watch",
-    "test:cov": "cross-env ACCESS=ADMIN jest --coverage --config ./test/jest-e2e.json",
+    "test:cov": "cross-env ACCESS=USER jest --coverage --config ./test/jest-e2e.json",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand"
   },
   "dependencies": {
@@ -32,6 +34,7 @@
     "@nestjs/passport": "^9.0.3",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/sequelize": "^9.0.0",
+    "@nestjs/serve-static": "^3.0.1",
     "@nestjs/swagger": "^6.2.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",

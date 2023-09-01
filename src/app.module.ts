@@ -1,5 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { join } from 'path';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -46,6 +48,14 @@ import {
         const logger = new LoggerService();
         logger.verbose(message);
       },
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'frontend'),
+      serveRoot: '/frontend',
+      serveStaticOptions: {
+        index: ['index.html'],
+      },
+      exclude: ['/users, /auth, /roles, /lists, /tasks, /api'],
     }),
     UserModule,
     RoleModule,
