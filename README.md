@@ -1,3 +1,61 @@
+# NestJS TODO List Application - University Project
+
+## Running the app without Docker (needed to be configured via changing POSTGRES_HOST to localhost)
+
+```bash
+# local mode
+$ npm run app:start:local
+
+# development
+$ npm run app:start
+
+# production mode
+$ npm run app:start:prod
+```
+
+## Running the app via Docker
+
+```bash
+$ docker-compose up --build
+```
+
+- postgres:15.2-alpine
+- node:18-alpine
+
+## Modules
+
+1. Users
+2. Roles
+3. Lists
+4. Tasks
+5. Auth
+
+## Features
+
+1. Custom Validation via ValidationPipe and class-validators (third-party package)
+2. Database - PostgreSQL via Sequelize ORM
+3. JWT Authorization
+4. Frontend - Bootstrap 5
+5. EsLint
+6. Prettier
+7. Custom Logger and Middleware (using third-party packages: winston and morgan)
+8. RoleGuard for accessing some private end-points
+9. Full Swagger Documentation
+10. Text Logs
+11. Migrations and Seeders via Sequelize
+
+## E2E Tests included for all roles:
+
+```bash
+# e2e tests
+$ npm run test:user
+$ npm run test:moderator
+$ npm run test:admin
+
+# test coverage
+$ npm run test:cov
+```
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
@@ -32,31 +90,7 @@
 $ npm install
 ```
 
-## Running the app
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
 
 ## Support
 
