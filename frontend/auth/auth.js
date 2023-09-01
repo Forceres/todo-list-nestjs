@@ -18,6 +18,7 @@ loginForm.addEventListener('submit', (event) => {
         'regreshToken',
         `Bearer ${response.data.regreshToken}`
       );
+      localStorage.setItem('personal_username', loginData.username);
       window.location.replace('../profile/profile.html');
     })
     .catch((error) => {

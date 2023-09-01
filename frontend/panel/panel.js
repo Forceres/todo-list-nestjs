@@ -13,7 +13,8 @@ function getUsers() {
       },
     })
     .then((response) => {
-      userData = response.data;
+      const excludedUser = localStorage.getItem('personal_username');
+      userData = response.data.filter((user) => user.username != excludedUser);
       countItems(userData);
       renderPage(0);
     })
